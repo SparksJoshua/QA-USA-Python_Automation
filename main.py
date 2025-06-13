@@ -6,7 +6,7 @@ class TestUrbanRoutes:
     @classmethod
     def setup_class(cls):
         if __name__ == "__main__":
-             print("Connected to the Urban Routes server")
+            print("Connected to the Urban Routes server")
 
     def test_set_route(self):
         # Add in S8
