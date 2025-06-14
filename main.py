@@ -8,7 +8,7 @@ class TestUrbanRoutes:
         if helpers.is_url_reachable(data.Urban_Routes_URL):
             print("Connected to the Urban Routes server")
         else:
-            print("Cannot connect to Urban Routes. Check the server is on and still running")
+            print("Cannot connect to Urban Routes. Check the server if is on and still running")
 
     def test_set_route(self):
         # Add in S8
