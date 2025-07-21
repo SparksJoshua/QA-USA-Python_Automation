@@ -3,8 +3,7 @@ import helpers
 import pages
 import time
 from selenium import webdriver
-from helpers import *
-from selenium.webdriver.support.ui import WebDriverWait
+
 
 
 class TestUrbanRoutes:
