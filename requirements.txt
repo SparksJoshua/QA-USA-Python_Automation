@@ -1,1 +1,10 @@
+pytest~=8.4.0
 pip~=25.1.1
+attrs~=25.3.0
+PySocks~=1.7.1
+Pygments~=2.19.1
+typing_extensions~=4.14.1
+pluggy~=1.6.0
+iniconfig~=2.1.0
+packaging~=25.0
+selenium~=4.34.2
