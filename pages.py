@@ -11,6 +11,8 @@ class UrbanRoutesPage:
     TO_LOCATOR = (By.ID, 'to')
     CALL_TAXI_BUTTON = (By.CSS_SELECTOR, '.button.round')
     SUPPORTIVE_CAR_BUTTON = (By.XPATH, '//img[@alt="Supportive"]')
+    SUPPORTIVE_ACTIVE_SELECTED = (By.CSS_SELECTOR, "div.tcard.active")
+    SUPPORTIVE_TEXT_DISPLAY = (By.CLASS_NAME, "tcard-title")
     PHONE_NUMBER_BUTTON = (By.XPATH, '//div[@class="np-button"]')
     PHONE_NUMBER_DISPLAYED_TEXT = (By.XPATH, '//div[@class="np-text"]')
     PHONE_NUMBER_TEXT =(By.ID, 'phone')
@@ -18,25 +20,20 @@ class UrbanRoutesPage:
     SMS_CODE_INPUT_FIELD = (By.ID, 'code')
     CONFIRM_BUTTON = (By.XPATH, '//button[text()="Confirm"]')
     METHOD_PAYMENT_BUTTON = (By.CSS_SELECTOR, '.pp-value-text')
-    CASH_BUTTON = (By.CSS_SELECTOR, 'label[for="cash"]')
     ADD_CARD_BUTTON = (By.XPATH, '//img[contains(@src, "card.411e0152")]')
     CARD_NUMBER_INPUT_FIELD = (By.ID, 'number')
     CODE_INPUT_FIELD = (By.XPATH, '//input[@placeholder="12"]')
     LINK_BUTTON = (By.XPATH, '//button[text()="Link"]')
     X_BUTTON = (By.CSS_SELECTOR, 'button.section-close')
+    PAYMENT_METHOD_TYPE = (By.CSS_SELECTOR, ".pp-value-text")
     MESSAGE_THE_DRIVER_INPUT_FIELD = (By.XPATH, '//input[@placeholder="Get some whiskey"]')
     BLANKET_HANDKERCHIEFS_TOGGLE = (By.XPATH, '//div[@class="r-sw-label" and text()="Blanket and handkerchiefs"]/following-sibling::div[@class="r-sw"]//span[contains(@class, "slider")]')
-    SOUND_PROOF_CURTAIN_TOGGLE = (By.XPATH, '//div[@class="r-sw-label" and text()="Soundproof curtain"]/following-sibling::div[@class="r-sw"]//span[contains(@class, "slider")]')
+    BLANKET_HANDKERCHIEFS_CHECKBOX = (By.XPATH, '//div[@class="r-sw-label" and text()="Blanket and handkerchiefs"]/following-sibling::div[@class="r-sw"]//input[@type="checkbox"]')
     ICE_CREAM_DECREMENT_BUTTON = (By.XPATH, '//div[text()="Ice cream"]/following-sibling::div//div[contains(@class, "counter-minus")]')
-    ICE_CREAM_INCREMENT_BUTTON = (By.XPATH, '//div[text()="Ice cream"]/following-sibling::div//div[contains(@class, "counter-plus")]')
-    ICE_CREAM_QUANTITY = ( By.XPATH, "//div[text()='Ice Cream']/following-sibling::div[@class='counter-value']" )
-    CHOCOLATE_DECREMENT_BUTTON = (By.XPATH, '//div[text()="Chocolate"]/following-sibling::div//div[contains(@class, "counter-minus")]')
-    CHOCOLATE_INCREMENT_BUTTON = (By.XPATH, '//div[text()="Chocolate"]/following-sibling::div//div[contains(@class, "counter-plus")]')
-    CHOCOLATE_QUANTITY = ( By.XPATH, "//div[text()='Chocolate']/following-sibling::div[@class='counter-value']" )
-    STRAWBERRY_DECREMENT_BUTTON = (By.XPATH, '//div[text()="Strawberry"]/following-sibling::div//div[contains(@class, "counter-minus")]')
-    STRAWBERRY_INCREMENT_BUTTON = (By.XPATH, '//div[text()="Strawberry"]/following-sibling::div//div[contains(@class, "counter-plus")]')
-    STRAWBERRY_QUANTITY = (By.XPATH, "//div[text()='Strawberry']/following-sibling::div[@class='counter-value']")
+    ICE_CREAM_INCREMENT_BUTTON = (By.CSS_SELECTOR, ".counter-plus")
+    ICE_CREAM_QUANTITY = (By.XPATH, '//div[text()="Ice cream"]/following-sibling::div//div[@class="counter-value"]')
     ENTER_THE_NUMBER_AND_ORDER_BUTTON = (By.CSS_SELECTOR, "div.smart-button-wrapper > button.smart-button")
+    ORDER_CAR_SCREEN   = (By.XPATH, "//div[@class='order-header-title' and text()='Car search']")
 
 
     def __init__(self, driver):
@@ -60,6 +57,11 @@ class UrbanRoutesPage:
     def click_supportive_car_button(self):
         self.driver.find_element(*self.SUPPORTIVE_CAR_BUTTON).click()
 
+    def is_supportive_tab_selected(self):
+        active_card = self.driver.find_element(*self.SUPPORTIVE_ACTIVE_SELECTED)
+        title = active_card.find_element(*self.SUPPORTIVE_TEXT_DISPLAY).text
+        return title
+
     def click_phone_number_button(self):
         self.driver.find_element(*self.PHONE_NUMBER_BUTTON).click()
 
@@ -80,9 +82,6 @@ class UrbanRoutesPage:
 
     def select_method_payment_button(self):
         self.driver.find_element(*self.METHOD_PAYMENT_BUTTON).click()
-
-    def click_cash_button(self):
-        self.driver.find_element(*self.CASH_BUTTON).click()
 
     def click_add_card_button(self):
         self.driver.find_element(*self.ADD_CARD_BUTTON).click()
@@ -112,6 +111,9 @@ class UrbanRoutesPage:
                 return
         raise Exception("No visible close button found")
 
+    def get_payment_method(self):
+        return self.driver.find_element(*self.PAYMENT_METHOD_TYPE).text
+
     def enter_message_the_driver_input_field(self, messages):
         self.driver.find_element(*self.MESSAGE_THE_DRIVER_INPUT_FIELD).send_keys(messages)
 
@@ -121,41 +123,19 @@ class UrbanRoutesPage:
     def click_blanket_handkerchiefs_toggle(self):
         self.driver.find_element(*self.BLANKET_HANDKERCHIEFS_TOGGLE).click()
 
-    def get_blanket_handkerchiefs(self):
-        return self.driver.find_element(*self.BLANKET_HANDKERCHIEFS_TOGGLE).is_selected()
-
-    def click_sound_proof_counter_toggle(self):
-        self.driver.find_element(*self.SOUND_PROOF_CURTAIN_TOGGLE).click()
-
-    def get_sound_proof_counter(self):
-        return self.driver.find_element(*self.SOUND_PROOF_CURTAIN_TOGGLE).is_selected()
-
-    def click_ice_cream_decrement_button(self):
-        self.driver.find_element(*self.ICE_CREAM_DECREMENT_BUTTON).click()
+    def is_blanket_handkerchiefs_selected(self):
+        checkbox = self.driver.find_element(*self.BLANKET_HANDKERCHIEFS_CHECKBOX)
+        return checkbox.is_selected()
 
     def click_ice_cream_increment_button(self):
         self.driver.find_element(*self.ICE_CREAM_INCREMENT_BUTTON).click()
 
     def get_ice_cream_quantity(self):
-        return int(self.driver.find_element(*self.ICE_CREAM_QUANTITY).text)
-
-    def click_chocolate_decrement_button(self):
-        self.driver.find_element(*self.CHOCOLATE_DECREMENT_BUTTON).click()
-
-    def click_chocolate_increment_button(self):
-        self.driver.find_element(*self.CHOCOLATE_INCREMENT_BUTTON).click()
-
-    def get_chocolate_quantity(self):
-        return int(self.driver.find_element(*self.CHOCOLATE_QUANTITY).text)
-
-    def click_strawberry_decrement_button(self):
-        self.driver.find_element(*self.STRAWBERRY_DECREMENT_BUTTON).click()
-
-    def click_strawberry_increment_button(self):
-        self.driver.find_element(*self.STRAWBERRY_INCREMENT_BUTTON).click()
-
-    def get_strawberry_quantity(self):
-        return int(self.driver.find_element(*self.STRAWBERRY_QUANTITY).text)
+        quantity_text = self.driver.find_element(*self.ICE_CREAM_QUANTITY).text
+        return int(quantity_text)
 
     def click_enter_number_and_order_button(self):
         self.driver.find_element(*self.ENTER_THE_NUMBER_AND_ORDER_BUTTON).click()
+
+    def ordering_car_screen_selected(self):
+        return self.driver.find_element(*self.ORDER_CAR_SCREEN).is_displayed()
